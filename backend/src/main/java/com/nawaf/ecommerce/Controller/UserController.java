@@ -137,4 +137,47 @@ public class UserController {
             default -> ResponseEntity.status(200).body(new ApiResponse("Role changed successfully"));
         };
     }
+
+    @PostMapping("/buy-gift/{senderId}/{receiverId}/{productId}/{merchantId}")
+    public ResponseEntity<?> buyProductAsGift(@PathVariable String senderId, @PathVariable String receiverId, @PathVariable String productId, @PathVariable String merchantId) {
+        int giftCase = userService.buyProductAsGift(senderId, receiverId, productId, merchantId);
+
+        return switch (giftCase) {
+            case 1 -> ResponseEntity.status(404).body(new ApiResponse("Sender not found"));
+            case 2 -> ResponseEntity.status(404).body(new ApiResponse("Receiver not found"));
+            case 3 -> ResponseEntity.status(400).body(new ApiResponse("Cannot send gift to yourself"));
+            case 4 -> ResponseEntity.status(404).body(new ApiResponse("Product not found"));
+            case 5 -> ResponseEntity.status(404).body(new ApiResponse("Merchant stock not found"));
+            case 6 -> ResponseEntity.status(400).body(new ApiResponse("Product is out of stock"));
+            case 7 -> ResponseEntity.status(400).body(new ApiResponse("Sender doesn't have enough money"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("Gift purchased successfully"));
+        };
+    }
+
+    @PutMapping("/products/fix-invalid-categories/{adminId}")
+    public ResponseEntity<?> setProductsDontHaveCategoryToNull(@PathVariable String adminId){
+        int setCase = userService.setProductsDontHaveCategoryToNull(adminId);
+
+        return switch (setCase) {
+            case 1 -> ResponseEntity.status(400).body(new ApiResponse("Admin not found"));
+            case 2 -> ResponseEntity.status(400).body(new ApiResponse("not authorize"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("Set all product don't have category to null successfully"));
+        };
+    }
+
+    @PutMapping("/stocks/fix-invalid-references/{adminId}")
+    public ResponseEntity<?> setInvalidStockReferencesToNull(@PathVariable String adminId) {
+        int setCase = userService.setInvalidStockReferencesToNull(adminId);
+
+        return switch (setCase) {
+            case 1 -> ResponseEntity.status(404).body(new ApiResponse("Admin not found"));
+            case 2 -> ResponseEntity.status(403).body(new ApiResponse("Not authorized"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("Invalid stock references set to null successfully"));
+        };
+    }
+
+    @GetMapping("/system-summary")
+    public ResponseEntity<?> systemSummary() {
+        return ResponseEntity.status(200).body(userService.systemSummary());
+    }
 }

@@ -96,4 +96,22 @@ public class ProductService {
 
         return 0;
     }
+
+    // Case 0: Discount applied successfully
+    // Case 1: Product not found
+    // Case 2: Discount must be between 1 and 100
+    public int discountProduct(String id, double percentage) {
+        Product product = getProduct(id);
+
+        if (product == null) return 1;
+        if (percentage <= 0 || percentage > 100) return 2;
+
+        percentage /= 100;
+
+        product.setPrice(
+                product.getPrice() - (product.getPrice() * percentage)
+        );
+
+        return 0;
+    }
 }

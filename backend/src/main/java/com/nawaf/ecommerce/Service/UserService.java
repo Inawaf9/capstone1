@@ -189,4 +189,137 @@ public class UserService {
 
         return 0;
     }
+
+    // Case 0: Gift purchased successfully
+    // Case 1: Sender not found
+    // Case 2: Receiver not found
+    // Case 3: Cannot gift yourself
+    // Case 4: Product not found
+    // Case 5: Merchant stock not found
+    // Case 6: Merchant stock is zero
+    // Case 7: Sender doesn't have enough money
+    public int buyProductAsGift(String senderId, String receiverId, String productId, String merchantId) {
+        User sender = getUser(senderId);
+        User receiver = getUser(receiverId);
+
+        if (sender == null) return 1;
+        if (receiver == null) return 2;
+        if (senderId.equals(receiverId)) return 3;
+
+        Product product = productService.getProduct(productId);
+
+        if (product == null) return 4;
+
+        MerchantStock merchantStock = merchantStockService.getMerchantStockByProductIdAndMerchantId(merchantId, productId);
+
+        if (merchantStock == null) return 5;
+        if (merchantStock.getStock() <= 0) return 6;
+        if (sender.getBalance() < product.getPrice()) return 7;
+
+        sender.setBalance(sender.getBalance() - product.getPrice());
+        merchantStock.setStock(merchantStock.getStock() - 1);
+
+        return 0;
+    }
+
+    // Case 0: Invalid category set to null successfully
+    // Case 1: Admin not found
+    // Case 2: Not authorized
+    public int setProductsDontHaveCategoryToNull(String adminId) {
+        User admin = getUser(adminId);
+
+        if (admin == null) return 1;
+        if (!admin.getRole().equals("admin")) return 2;
+
+        List<Product> products = productService.getProducts();
+
+        for (Product product : products) {
+
+            if (categoryService.getCategory(product.getCategoryId()) == null) {
+                product.setCategoryId(null);
+            }
+        }
+
+        return 0;
+    }
+
+    // Case 0: Invalid stock references set to null successfully
+    // Case 1: Admin not found
+    // Case 2: Not authorized
+    public int setInvalidStockReferencesToNull(String adminId) {
+        User admin = getUser(adminId);
+
+        if (admin == null) return 1;
+        if (!admin.getRole().equals("admin")) return 2;
+
+        List<MerchantStock> stocks = merchantStockService.getMerchantStockList();
+
+        for (MerchantStock stock : stocks) {
+            if (productService.getProduct(stock.getProductId()) == null) {
+                stock.setProductId(null);
+            }
+
+            if (merchantService.getMerchant(stock.getMerchantId()) == null) {
+                stock.setMerchantId(null);
+            }
+        }
+
+        return 0;
+    }
+
+    public Map<String, Object> systemSummary() {
+
+        int totalCustomers = 0;
+        int totalAdmins = 0;
+
+        for (User user : users) {
+            if (user.getRole().equalsIgnoreCase("customer")) {
+                totalCustomers++;
+            } else if (user.getRole().equalsIgnoreCase("admin")) {
+                totalAdmins++;
+            }
+        }
+
+        List<Product> products = productService.getProducts();
+        List<Merchant> merchants = merchantService.getMerchants();
+        List<Category> categories = categoryService.getCategories();
+        List<MerchantStock> stocks = merchantStockService.getMerchantStockList();
+
+        int totalStock = 0;
+        int outOfStock = 0;
+
+        for (MerchantStock stock : stocks) {
+            totalStock += stock.getStock();
+
+            if (stock.getStock() == 0) {
+                outOfStock++;
+            }
+        }
+
+        double totalPrice = 0;
+
+        for (Product product : products) {
+            totalPrice += product.getPrice();
+        }
+
+        double averagePrice = 0;
+
+        if (!products.isEmpty()) {
+            averagePrice = totalPrice / products.size();
+        }
+
+        Map<String, Object> summary = new HashMap<>();
+
+        summary.put("totalUsers", users.size());
+        summary.put("totalCustomers", totalCustomers);
+        summary.put("totalAdmins", totalAdmins);
+        summary.put("totalProducts", products.size());
+        summary.put("totalCategories", categories.size());
+        summary.put("totalMerchants", merchants.size());
+        summary.put("totalStock", totalStock);
+        summary.put("outOfStock", outOfStock);
+        summary.put("averagePrice", averagePrice);
+
+        return summary;
+    }
 }
