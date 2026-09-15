@@ -63,4 +63,19 @@ public class ProductController {
             default -> ResponseEntity.status(201).body(new ApiResponse("Product deleted successfully"));
         };
     }
+
+    @PutMapping("/discount-category/{categoryId}/{percentage}")
+    public ResponseEntity<?> discountCategory(@PathVariable String categoryId, @PathVariable double percentage){
+        if(percentage <= 0) return ResponseEntity
+                .status(400)
+                .body(new ApiResponse("Percentage must be positive number"));
+
+        int discountCase = productService.discountCategory(categoryId, percentage);
+
+        return switch (discountCase){
+            case 1 ->  ResponseEntity.status(400).body(new ApiResponse("Product not found in this category"));
+            case 2 ->  ResponseEntity.status(400).body(new ApiResponse("Discount range between 1 and 100"));
+            default -> ResponseEntity.status(201).body(new ApiResponse("Applied discount successfully"));
+        };
+    }
 }

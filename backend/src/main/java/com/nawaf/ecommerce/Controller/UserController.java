@@ -77,4 +77,64 @@ public class UserController {
             default -> ResponseEntity.status(200).body(new ApiResponse("User Bought product successfully"));
         };
     }
+
+    @PostMapping("/buy-product/{userId}/{productId}/{merchantId}/{quantity}")
+    public ResponseEntity<?> buyMoreThanOneProduct(@PathVariable String userId, @PathVariable String productId, @PathVariable String merchantId, @PathVariable int quantity){
+        if(quantity <= 0) return ResponseEntity
+                .status(400)
+                .body(new ApiResponse("Quantity must be positive number"));
+
+        int buyCase = userService.buyMoreThanOneProduct(userId,productId,merchantId, quantity);
+
+        return switch (buyCase) {
+            case 1 -> ResponseEntity.status(400).body(new ApiResponse("User not found"));
+            case 2 -> ResponseEntity.status(400).body(new ApiResponse("Product not found"));
+            case 3 -> ResponseEntity.status(400).body(new ApiResponse("Stock not found"));
+            case 4 -> ResponseEntity.status(400).body(new ApiResponse("Stock is zero"));
+            case 5 -> ResponseEntity.status(400).body(new ApiResponse("Merchant stock less than quantity"));
+            case 6 -> ResponseEntity.status(400).body(new ApiResponse("User don't have enough money"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("User Bought product successfully"));
+        };
+    }
+
+    @PostMapping("/transfer/{userId}/{receiverId}/{amount}")
+    public ResponseEntity<?> transferBalance(@PathVariable String userId, @PathVariable String receiverId, @PathVariable double amount) {
+        int transferCase = userService.transferBalance(userId, receiverId, amount);
+
+        return switch (transferCase) {
+            case 1 -> ResponseEntity.status(404).body(new ApiResponse("User not found"));
+            case 2 -> ResponseEntity.status(404).body(new ApiResponse("Receiver not found"));
+            case 3 -> ResponseEntity.status(400).body(new ApiResponse("User doesn't have enough balance"));
+            case 4 -> ResponseEntity.status(400).body(new ApiResponse("Same user cannot be a receiver"));
+            case 5 -> ResponseEntity.status(400).body(new ApiResponse("Amount must be positive"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("Balance transferred successfully"));
+        };
+    }
+
+    @PutMapping("/charge/{id}/{amount}")
+    public ResponseEntity<?> chargeBalance(@PathVariable String id, @PathVariable double amount){
+        if(amount <= 0) return ResponseEntity
+                .status(400)
+                .body(new ApiResponse("Amount must be positive number"));
+
+        int chargeCase = userService.chargeBalance(id, amount);
+
+        return switch (chargeCase) {
+            case 1 -> ResponseEntity.status(400).body(new ApiResponse("User not found"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("Balance Charged successfully"));
+        };
+    }
+
+    @PutMapping("/change-role-to-admin/{adminId}/{customerId}")
+    public ResponseEntity<?> changeCustomerRoleToAdmin(@PathVariable String adminId, @PathVariable String customerId){
+        int changeCase = userService.changeCustomerRoleToAdmin(adminId, customerId);
+
+        return switch (changeCase) {
+            case 1 -> ResponseEntity.status(404).body(new ApiResponse("Admin not found"));
+            case 2 -> ResponseEntity.status(404).body(new ApiResponse("Customer not found"));
+            case 3 -> ResponseEntity.status(403).body(new ApiResponse("Not authorized to change role"));
+            case 4 -> ResponseEntity.status(400).body(new ApiResponse("User already admin"));
+            default -> ResponseEntity.status(200).body(new ApiResponse("Role changed successfully"));
+        };
+    }
 }
