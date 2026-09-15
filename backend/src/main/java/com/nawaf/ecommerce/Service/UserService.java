@@ -110,4 +110,83 @@ public class UserService {
 
         return 0;
     }
+
+    // Case 0: User buy product successfully
+    // Case 1: User not found
+    // Case 2: Product not found
+    // Case 3: Merchant stock not found
+    // Case 4: Merchant stock is zero
+    // Case 5: Merchant stock less than quantity
+    // Case 6: User don't have enough money
+    public int buyMoreThanOneProduct(String userId, String productId, String merchantId, int quantity){
+        User user = getUser(userId);
+        Product product = productService.getProduct(productId);
+        MerchantStock merchantStock = merchantStockService.getMerchantStockByProductIdAndMerchantId(merchantId, productId);
+
+        if(user == null) return 1;
+        if(product == null) return 2;
+        if(merchantStock == null)return 3;
+        if(merchantStock.getStock() <= 0) return 4;
+        if(merchantStock.getStock() < quantity) return 5;
+        if(user.getBalance() < (product.getPrice() * quantity)) return 6;
+
+        merchantStock.setStock(merchantStock.getStock() - quantity);
+        user.setBalance(user.getBalance() - (product.getPrice() * quantity));
+
+        return 0;
+    }
+
+    // Case 0: Balance transferred successfully
+    // Case 1: User not found
+    // Case 2: Receiver not found
+    // Case 3: User doesn't have enough balance
+    // Case 4: Same user cannot be a receiver
+    // Case 5: Amount must be positive
+    public int transferBalance(String userId, String receiverId, double amount) {
+        if (userId.equals(receiverId)) return 4;
+        if (amount <= 0) return 5;
+
+        User foundUser = getUser(userId);
+        User foundReceiver = getUser(receiverId);
+
+        if (foundUser == null) return 1;
+        if (foundReceiver == null) return 2;
+        if (foundUser.getBalance() < amount) return 3;
+
+        foundUser.setBalance(foundUser.getBalance() - amount);
+        foundReceiver.setBalance(foundReceiver.getBalance() + amount);
+
+        return 0;
+    }
+
+    // Case 0: User balance charged successfully
+    // Case 1: User not found
+    public int chargeBalance(String id, double amount){
+        User foundUser = getUser(id);
+
+        if(foundUser == null) return 1;
+
+        foundUser.setBalance(foundUser.getBalance() + amount);
+
+        return 0;
+    }
+
+    // Case 0: Change role successfully
+    // Case 1: Admin not found
+    // Case 2: Customer not found
+    // Case 3: Not authorize to change role
+    // Case 4: User already admin
+    public int changeCustomerRoleToAdmin(String adminId, String customerId){
+        User admin  = getUser(adminId);
+        User customer = getUser(customerId);
+
+        if(admin == null) return 1;
+        if(customer == null) return 2;
+        if(!admin.getRole().equals("admin")) return 3;
+        if(customer.getRole().equals("admin")) return 4;
+
+        customer.setRole("admin");
+
+        return 0;
+    }
 }

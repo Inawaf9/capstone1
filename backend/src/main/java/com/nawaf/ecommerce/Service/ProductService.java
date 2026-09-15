@@ -70,4 +70,30 @@ public class ProductService {
         products.remove(product);
         return 0;
     }
+
+    // Case 0: Discount applied successfully
+    // Case 1: Product not found in category
+    // Case 2: Discount must be between 1 and 100
+    public int discountCategory(String categoryId, double percentage) {
+        if (percentage <= 0 || percentage > 100) return 2;
+
+        boolean productFound = false;
+        percentage /= 100;
+
+        for (Product product : products) {
+            if (product.getCategoryId() != null
+                    && product.getCategoryId().equals(categoryId)) {
+
+                productFound = true;
+
+                product.setPrice(
+                        product.getPrice() - (product.getPrice() * percentage)
+                );
+            }
+        }
+
+        if (!productFound) return 1;
+
+        return 0;
+    }
 }
