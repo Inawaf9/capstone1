@@ -222,51 +222,6 @@ public class UserService {
         return 0;
     }
 
-    // Case 0: Invalid category set to null successfully
-    // Case 1: Admin not found
-    // Case 2: Not authorized
-    public int setProductsDontHaveCategoryToNull(String adminId) {
-        User admin = getUser(adminId);
-
-        if (admin == null) return 1;
-        if (!admin.getRole().equals("admin")) return 2;
-
-        List<Product> products = productService.getProducts();
-
-        for (Product product : products) {
-
-            if (categoryService.getCategory(product.getCategoryId()) == null) {
-                product.setCategoryId(null);
-            }
-        }
-
-        return 0;
-    }
-
-    // Case 0: Invalid stock references set to null successfully
-    // Case 1: Admin not found
-    // Case 2: Not authorized
-    public int setInvalidStockReferencesToNull(String adminId) {
-        User admin = getUser(adminId);
-
-        if (admin == null) return 1;
-        if (!admin.getRole().equals("admin")) return 2;
-
-        List<MerchantStock> stocks = merchantStockService.getMerchantStockList();
-
-        for (MerchantStock stock : stocks) {
-            if (productService.getProduct(stock.getProductId()) == null) {
-                stock.setProductId(null);
-            }
-
-            if (merchantService.getMerchant(stock.getMerchantId()) == null) {
-                stock.setMerchantId(null);
-            }
-        }
-
-        return 0;
-    }
-
     public Map<String, Object> systemSummary() {
 
         int totalCustomers = 0;
