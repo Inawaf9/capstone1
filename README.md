@@ -1,15 +1,13 @@
 # 🛒 E-Commerce System
 
 <p align="center">
-  <div align="center" style="background-color: white; padding: 20px;">
   <img src="tuwaiq-academy-logo.png" alt="Tuwaiq Academy" width="320"/>
-</div>
 </p>
 
-<h3 align="center">E-Commerce REST API</h3>
+<h3 align="center">E-Commerce Full-Stack System</h3>
 
 <p align="center">
-  A backend E-Commerce system built with <b>Java</b> and <b>Spring Boot</b>
+  A full-stack E-Commerce system built with <b>Java, Spring Boot, Next.js, and React</b>
   as part of the <b>Tuwaiq Academy Java Bootcamp</b>.
 </p>
 
@@ -17,9 +15,18 @@
 
 ## 📌 About the Project
 
-This project is a RESTful E-Commerce backend system developed using **Java and Spring Boot**.
+This project is a full-stack E-Commerce system developed using **Java, Spring Boot, Next.js, React, and TypeScript**.
 
-The system manages the main components of an E-Commerce platform:
+The project consists of two main parts:
+
+- **Backend:** REST API built with Spring Boot
+- **Frontend:** User interface built with Next.js and React
+
+The backend handles the main business logic, validation, and data management.
+
+The frontend communicates with the backend using HTTP requests and provides a simple interface for interacting with the system.
+
+The system manages:
 
 - Users
 - Products
@@ -40,7 +47,7 @@ In addition to standard CRUD operations, the project implements multiple busines
 - Data consistency operations
 - System statistics
 
-The main goal of the project is to demonstrate **Spring Boot architecture, REST API development, validation, entity relationships, and business logic implementation**.
+The main goal of the project is to demonstrate **Spring Boot architecture, REST API development, validation, business logic, React fundamentals, and frontend-backend integration**.
 
 ---
 
@@ -48,13 +55,19 @@ The main goal of the project is to demonstrate **Spring Boot architecture, REST 
 
 | Technology | Purpose |
 |---|---|
-| Java | Main programming language |
+| Java | Backend programming language |
 | Spring Boot | Backend framework |
 | Spring Web | Building REST APIs |
 | Jakarta Validation | Model and request validation |
 | Lombok | Reducing boilerplate code |
-| Maven | Dependency management |
-| IntelliJ IDEA | Development environment |
+| Maven | Backend dependency management |
+| Next.js | Frontend framework |
+| React | Building the user interface |
+| TypeScript | Frontend programming language |
+| Tailwind CSS | Styling |
+| shadcn/ui | UI components |
+| pnpm | Frontend package manager |
+| IntelliJ IDEA | Backend development environment |
 | Git | Version control |
 | GitHub | Repository and Pull Request management |
 
@@ -62,22 +75,47 @@ The main goal of the project is to demonstrate **Spring Boot architecture, REST 
 
 # 🏗️ Project Architecture
 
-The application follows a simple layered architecture:
+The application follows a simple full-stack architecture:
 
 ```text
-Client
-   │
-   ▼
-Controller
-   │
-   ▼
+User
+ │
+ ▼
+Next.js Frontend
+ │
+ │ HTTP Requests
+ ▼
+Spring Boot Controller
+ │
+ ▼
 Service
-   │
-   ▼
+ │
+ ▼
 Model / In-Memory Data
 ```
 
-Each layer has a specific responsibility.
+Each part has a specific responsibility.
+
+### Frontend
+
+The frontend is responsible for:
+
+- Displaying system data
+- Receiving user input
+- Sending requests to the backend
+- Displaying backend responses
+- Managing simple UI state
+- Providing forms and dialogs for system operations
+
+The frontend uses simple React concepts such as:
+
+```text
+useState
+useEffect
+fetch
+map
+find
+```
 
 ### Controller Layer
 
@@ -137,6 +175,8 @@ e-commerce/
 │   │   ├── Api/
 │   │   │   └── ApiResponse.java
 │   │   │
+│   │   ├── Config/
+│   │   │
 │   │   ├── Controller/
 │   │   │   ├── UserController.java
 │   │   │   ├── ProductController.java
@@ -163,6 +203,17 @@ e-commerce/
 │   └── pom.xml
 │
 └── frontend/
+    ├── app/
+    │   ├── page.tsx
+    │   ├── products/
+    │   ├── categories/
+    │   └── merchants/
+    │
+    ├── components/
+    ├── lib/
+    ├── public/
+    ├── package.json
+    └── pnpm-lock.yaml
 ```
 
 ---
@@ -170,14 +221,14 @@ e-commerce/
 # 📊 UML Class Diagram
 
 <p align="center">
-  <div align="center" style="background-color: white; padding: 20px;">
-    <img src="ecommerce-uml-diagram.png" alt="E-Commerce UML Class Diagram" width="900"/>
-  </div>
+  <img src="ecommerce-uml-diagram.png" alt="E-Commerce UML Class Diagram" width="900"/>
 </p>
 
 The UML diagram represents the main entities of the system and the relationships between them.
 
 ---
+
+# 📦 Models
 
 ## 👤 User
 
@@ -218,7 +269,7 @@ Each product can reference a category using:
 categoryId
 ```
 
-The system supports applying discounts to either:
+The system supports applying discounts to:
 
 - One specific product
 - All products belonging to a category
@@ -235,7 +286,7 @@ A product can belong to a category through:
 Product.categoryId
 ```
 
-The system can also apply a percentage discount to every product belonging to a specific category.
+The system can apply a percentage discount to every product belonging to a specific category.
 
 ---
 
@@ -282,6 +333,87 @@ Merchant A
 Merchant B
 └── Product X → 25 units
 ```
+
+---
+
+# 🖥️ Frontend
+
+The project includes a **Next.js frontend** that provides a user interface for the Spring Boot API.
+
+The frontend communicates directly with the backend using `fetch`.
+
+## Home Page
+
+The Home page provides:
+
+- Welcome section
+- Current system information
+- System Summary
+- Administrative maintenance actions
+
+## Products Page
+
+The Products page allows users to:
+
+- View products
+- Add products
+- Update products
+- Delete products
+- Buy one product
+- Buy multiple quantities
+- Buy a product as a gift
+- Apply a product discount
+
+## Categories Page
+
+The Categories page allows users to:
+
+- View categories
+- Add categories
+- Update categories
+- Delete categories
+- Apply discounts to category products
+
+## Merchants Page
+
+The Merchants page allows users to:
+
+- View merchants
+- Add merchants
+- Update merchants
+- Delete merchants
+- View merchant stock
+- Add merchant stock
+- Update merchant stock
+- Delete merchant stock
+- Restock products
+
+## User Operations
+
+The frontend allows a User ID to be selected as the current user.
+
+The current user information includes:
+
+- User ID
+- Role
+- Balance
+
+Users can also perform operations such as:
+
+- Charge balance
+- Transfer balance
+- Purchase products
+- Purchase gifts
+
+Admin users can perform additional operations such as:
+
+- Change a customer role to admin
+- Fix invalid product categories
+- Fix invalid merchant stock references
+
+There is no authentication system in the current version.
+
+The frontend uses the selected User ID to interact with the backend.
 
 ---
 
@@ -377,24 +509,6 @@ POST /buy-product/{userId}/{productId}/{merchantId}
 
 ### Cases
 
-Before completing the purchase, the system checks:
-
-```text
-User exists
-      ↓
-Product exists
-      ↓
-MerchantStock exists
-      ↓
-Stock > 0
-      ↓
-User has enough balance
-      ↓
-Purchase
-```
-
-Possible cases:
-
 | Case | Result |
 |---:|---|
 | `0` | Product purchased successfully |
@@ -406,8 +520,6 @@ Possible cases:
 
 ### On Success
 
-The system performs two changes:
-
 ```text
 User Balance -= Product Price
 Merchant Stock -= 1
@@ -415,7 +527,7 @@ Merchant Stock -= 1
 
 ---
 
-# 2. 📥 Restock Product
+## 2. 📥 Restock Product
 
 Allows additional stock to be added to a product for a specific merchant.
 
@@ -435,11 +547,9 @@ merchantId + productId
 Current Stock += Quantity
 ```
 
-This allows merchants to replenish their inventory without creating a new stock record.
-
 ---
 
-# 3. 🛍️ Buy Multiple Products
+## 3. 🛍️ Buy Multiple Products
 
 Allows a user to purchase multiple units of the same product in one operation.
 
@@ -448,8 +558,6 @@ POST /buy-product/{userId}/{productId}/{merchantId}/{quantity}
 ```
 
 ### Cases
-
-The system verifies:
 
 | Case | Result |
 |---:|---|
@@ -476,7 +584,7 @@ Merchant Stock -= Quantity
 
 ---
 
-# 4. 💸 Transfer Balance
+## 4. 💸 Transfer Balance
 
 Allows one user to transfer part of their balance to another user.
 
@@ -515,7 +623,7 @@ Receiver Balance += Amount
 
 ---
 
-# 5. 💳 Charge User Balance
+## 5. 💳 Charge User Balance
 
 Adds money to an existing user's balance.
 
@@ -536,7 +644,7 @@ User Balance += Amount
 
 ---
 
-# 6. 👑 Change Customer Role to Admin
+## 6. 👑 Change Customer Role to Admin
 
 Allows an admin to promote a customer to an admin.
 
@@ -566,7 +674,7 @@ This operation demonstrates simple role-based business authorization.
 
 ---
 
-# 7. 🏷️ Discount Category
+## 7. 🏷️ Discount Category
 
 Applies a percentage discount to every product belonging to a specific category.
 
@@ -581,12 +689,6 @@ The percentage must satisfy:
 ```text
 percentage > 0
 percentage <= 100
-```
-
-The system searches through all products and applies the discount to products with the specified:
-
-```text
-categoryId
 ```
 
 ### Calculation
@@ -608,7 +710,7 @@ New Price = 80
 
 ---
 
-# 8. 🎁 Buy Product as Gift
+## 8. 🎁 Buy Product as Gift
 
 Allows one user to purchase a product as a gift for another user.
 
@@ -636,25 +738,7 @@ Sender Balance -= Product Price
 Merchant Stock -= 1
 ```
 
-This operation connects multiple entities:
-
-```text
-Sender
-   │
-   │ pays
-   ▼
-Product
-   │
-   ▼
-MerchantStock
-
-Receiver
-   ▲
-   │
- Gift
-```
-
-It also requires communication between multiple services:
+This operation uses:
 
 ```text
 UserService
@@ -666,7 +750,7 @@ UserService
 
 ---
 
-# 9. 💰 Discount Product
+## 9. 💰 Discount Product
 
 Applies a percentage discount to one specific product.
 
@@ -698,7 +782,7 @@ New Price = Price - (Price × Discount)
 
 ---
 
-# 10. 🔧 Fix Invalid Product Categories
+## 10. 🔧 Fix Invalid Product Categories
 
 Checks all products for category references that no longer point to an existing category.
 
@@ -725,10 +809,10 @@ Product.categoryId
         │
         ▼
 Does Category exist?
-     /       \
-   Yes        No
-   │           │
- Keep      Set to null
+      /       \
+    Yes        No
+     │          │
+   Keep     Set to null
 ```
 
 If a category no longer exists:
@@ -737,11 +821,9 @@ If a category no longer exists:
 product.setCategoryId(null);
 ```
 
-This prevents products from keeping invalid references.
-
 ---
 
-# 11. 🔧 Fix Invalid Merchant Stock References
+## 11. 🔧 Fix Invalid Merchant Stock References
 
 Checks all `MerchantStock` records and repairs invalid references.
 
@@ -761,7 +843,7 @@ Only an admin can perform this operation.
 | `1` | Admin not found |
 | `2` | User is not authorized |
 
-The system validates both:
+The system validates:
 
 ```text
 MerchantStock.productId
@@ -787,11 +869,9 @@ If the merchant does not exist:
 stock.setMerchantId(null);
 ```
 
-This feature helps maintain data consistency between entities.
-
 ---
 
-# 12. 📊 System Summary
+## 12. 📊 System Summary
 
 Provides an overview of the current E-Commerce system.
 
@@ -816,25 +896,21 @@ Total Stock Units
 Out-of-Stock Products
 
 Average Product Price
-Most Expensive Product
-Cheapest Product
 ```
 
 Example response:
 
 ```json
 {
-  "totalUsers": 10,
-  "totalCustomers": 8,
-  "totalAdmins": 2,
-  "totalProducts": 15,
-  "totalCategories": 4,
-  "totalMerchants": 3,
-  "totalStockUnits": 120,
-  "outOfStockProducts": 2,
-  "averageProductPrice": 85.5,
-  "mostExpensiveProduct": "Laptop",
-  "cheapestProduct": "Cable"
+  "totalUsers": 6,
+  "totalCustomers": 5,
+  "totalAdmins": 1,
+  "totalProducts": 10,
+  "totalCategories": 5,
+  "totalMerchants": 4,
+  "totalStockUnits": 173,
+  "outOfStockProducts": 0,
+  "averageProductPrice": 3024
 }
 ```
 
@@ -862,8 +938,6 @@ Common validation annotations include:
 
 ## 👤 User Validation
 
-The User model contains multiple validation rules.
-
 ### ID
 
 The user ID must start with:
@@ -872,10 +946,10 @@ The user ID must start with:
 u
 ```
 
-Valid example:
+Example:
 
 ```text
-u001
+u01
 ```
 
 Example pattern:
@@ -886,8 +960,6 @@ Example pattern:
     message = "User id must start with u"
 )
 ```
-
----
 
 ### Role
 
@@ -906,8 +978,6 @@ Example:
     message = "Role must be either customer or admin"
 )
 ```
-
----
 
 ### Password
 
@@ -934,8 +1004,6 @@ Example valid password:
 Test@1
 ```
 
----
-
 ### Email
 
 The email must have a valid email format.
@@ -949,8 +1017,6 @@ Example:
 ```text
 user@example.com
 ```
-
----
 
 ### Balance
 
@@ -986,8 +1052,6 @@ This is handled using Jakarta Validation and:
 @Valid
 ```
 
----
-
 ## Business Validation
 
 Business validation checks whether an operation is logically allowed.
@@ -996,23 +1060,14 @@ Examples:
 
 ```text
 Does the user exist?
-
 Does the product exist?
-
 Does the category exist?
-
 Does the merchant exist?
-
 Does the MerchantStock exist?
-
 Is the product available?
-
 Does the user have enough balance?
-
 Does the merchant have enough stock?
-
 Is the requesting user an admin?
-
 Is the transfer receiver different from the sender?
 ```
 
@@ -1053,11 +1108,11 @@ Example:
 return switch (transferCase) {
 
     case 1 -> ResponseEntity
-            .status(404)
+            .status(400)
             .body(new ApiResponse("User not found"));
 
     case 2 -> ResponseEntity
-            .status(404)
+            .status(400)
             .body(new ApiResponse("Receiver not found"));
 
     case 3 -> ResponseEntity
@@ -1078,7 +1133,7 @@ return switch (transferCase) {
 };
 ```
 
-This creates a clear flow:
+This creates a simple flow:
 
 ```text
 Service
@@ -1120,8 +1175,6 @@ Other business operations can reuse this method:
 User user = getUser(userId);
 ```
 
-Instead of repeating the same search loop in every method.
-
 The same concept is used across services for:
 
 ```text
@@ -1143,19 +1196,17 @@ Some operations require data from multiple services.
 For example, purchasing a product requires:
 
 ```text
-                UserService
+                 UserService
                     │
-          ┌─────────┴─────────┐
-          ▼                   ▼
-   ProductService     MerchantStockService
-          │                   │
-          ▼                   ▼
-       Product           MerchantStock
+           ┌────────┴────────┐
+           ▼                 ▼
+    ProductService    MerchantStockService
+           │                 │
+           ▼                 ▼
+        Product         MerchantStock
 ```
 
-The `UserService` can use other services to validate all required resources before completing the purchase.
-
-Example flow:
+Example purchase flow:
 
 ```text
 Purchase Request
@@ -1217,7 +1268,7 @@ Application Stops
 In-Memory Data Is Lost
 ```
 
-This project focuses primarily on understanding:
+The project focuses primarily on understanding:
 
 - Spring Boot
 - REST APIs
@@ -1228,6 +1279,9 @@ This project focuses primarily on understanding:
 - Validation
 - Entity relationships
 - HTTP responses
+- React
+- Next.js
+- Frontend-backend integration
 
 rather than database persistence.
 
@@ -1235,22 +1289,25 @@ rather than database persistence.
 
 # 🚦 HTTP Status Codes
 
-The API uses different HTTP status codes depending on the result of an operation.
+The API uses the following HTTP status codes:
 
 | Status Code | Meaning |
 |---:|---|
-| `200 OK` | Operation completed successfully |
+| `200 OK` | Request completed successfully |
 | `201 Created` | New resource created successfully |
-| `400 Bad Request` | Invalid input or business rule violation |
+| `400 Bad Request` | Invalid request or operation |
 
 ---
 
 # 🧪 Example Purchase Flow
 
-A product purchase demonstrates how multiple layers and entities interact.
+A product purchase demonstrates how the frontend, backend layers, and entities interact.
 
 ```text
-Client
+User
+  │
+  ▼
+Next.js Frontend
   │
   │ POST /buy-product/...
   ▼
@@ -1266,28 +1323,31 @@ UserService
   └── MerchantStockService
           │
           ▼
-  getMerchantStockByProductIdAndMerchantId()
+getMerchantStockByProductIdAndMerchantId()
           │
           ▼
-      Validate Stock
+    Validate Stock
           │
           ▼
-     Validate Balance
+   Validate Balance
           │
           ▼
-     Deduct Balance
+    Deduct Balance
           │
           ▼
-      Reduce Stock
+     Reduce Stock
           │
           ▼
-      Return Case 0
+     Return Case 0
           │
           ▼
-      UserController
+    UserController
           │
           ▼
-       200 OK
+        200 OK
+          │
+          ▼
+   Next.js Frontend
 ```
 
 ---
@@ -1313,6 +1373,7 @@ The E-Commerce system supports the following main use cases:
 15. Repair invalid product-category references.
 16. Repair invalid merchant-stock references.
 17. Generate system statistics.
+18. Interact with the system through the Next.js frontend.
 
 ---
 
@@ -1360,6 +1421,8 @@ Make sure the following are installed:
 
 - Java
 - Maven
+- Node.js
+- pnpm
 - Git
 
 ---
@@ -1368,31 +1431,26 @@ Make sure the following are installed:
 
 ```bash
 git clone <repository-url>
-```
-
-Move into the project:
-
-```bash
 cd e-commerce
 ```
 
-Then enter the backend:
+---
+
+## Run Backend
+
+Move into the backend:
 
 ```bash
 cd backend
 ```
 
----
-
-## Run Spring Boot
-
-Using Maven Wrapper:
+Run Spring Boot:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-The API will typically be available at:
+The backend will typically be available at:
 
 ```text
 http://localhost:8080
@@ -1400,9 +1458,39 @@ http://localhost:8080
 
 ---
 
+## Run Frontend
+
+Open another terminal and move into the frontend:
+
+```bash
+cd frontend
+```
+
+Install the dependencies:
+
+```bash
+pnpm install
+```
+
+Run the development server:
+
+```bash
+pnpm dev
+```
+
+The frontend will typically be available at:
+
+```text
+http://localhost:3000
+```
+
+The frontend sends HTTP requests to the Spring Boot backend.
+
+---
+
 # 📌 Design Decisions
 
-Several design decisions were used throughout the project.
+Several simple design decisions were used throughout the project.
 
 ### Business Logic in Services
 
@@ -1450,17 +1538,23 @@ CategoryService.getCategory()
 
 ### Consistent Operation Cases
 
-Service methods return consistent integer cases that Controllers translate into HTTP responses.
+Service methods return integer cases that Controllers translate into HTTP responses.
 
 ### Data Consistency
 
 Administrative maintenance endpoints can detect and repair invalid references between entities.
 
+### Simple Frontend
+
+The frontend uses basic React concepts and communicates with the backend using `fetch`.
+
+The frontend focuses on keeping the code simple and easy to understand while providing an interface for the backend features.
+
 ---
 
 # 👨‍💻 Developer
 
-**Nawaf**
+**Nawaf Alghamdi**
 
 Software Engineering Graduate
 
